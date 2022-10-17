@@ -54,7 +54,7 @@ public class Enemy : MonoBehaviour
 
     void SetupAI()
     {
-        startPos = transform;
+        startPos = Instantiate(new GameObject(), transform.position, transform.rotation).transform;
         endPos = _EM.GetRandomSpawnPoint();
         moveToPos = endPos;
     }
