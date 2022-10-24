@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : GameBehaviour
 {
     public CharacterController controller;
 
@@ -16,14 +16,6 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 velocity;
     bool isGrounded;
-
-    GameManager _GM;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        _GM = FindObjectOfType<GameManager>();
-    }
 
     // Update is called once per frame
     void Update()

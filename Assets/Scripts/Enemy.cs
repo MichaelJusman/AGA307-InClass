@@ -1,15 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : GameBehaviour
 {
+
+    public static event Action<GameObject> OnEnemyHit = null;
+    public static event Action<GameObject> OnEnemyDie = null;
+    
     public EnemyType myType;
     
     public float myHealth = 100f;
     public float mySpeed = 2f;
-    
-    EnemyManager _EM;
+    public float myDamage = 1f;
 
     [Header("AI")]
     public PatrolType myPatrol;
@@ -22,7 +26,6 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _EM = FindObjectOfType<EnemyManager>();
         Setup();
         SetupAI();
         StartCoroutine(Move());
@@ -56,6 +59,7 @@ public class Enemy : MonoBehaviour
     {
         startPos = Instantiate(new GameObject(), transform.position, transform.rotation).transform;
         endPos = _EM.GetRandomSpawnPoint();
+        endPos = EnemyManager.instance.GetRandomSpawnPoint();
         moveToPos = endPos;
     }
 
@@ -88,6 +92,34 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         StartCoroutine(Move());
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Hit(10);
+        }
+    }
+
+
+    void Hit(int _damage)
+    {
+        myHealth -= _damage;
+        if (myHealth <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            OnEnemyHit?.Invoke(this.gameObject);
+        }
+    }
+
+    void Die()
+    {
+        StopAllCoroutines();
+        OnEnemyDie?.Invoke(this.gameObject);
     }
 
 }
