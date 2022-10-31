@@ -14,7 +14,7 @@ public enum PatrolType
 {
     Linear,
     Random,
-    Loop
+    Loop,
 }
 
 public class EnemyManager : Singleton<EnemyManager>
@@ -28,6 +28,7 @@ public class EnemyManager : Singleton<EnemyManager>
     public int spawnCount = 10;
     public string killCondition = "Two";
     public float SpawnDelay = 2f;
+    public int enemyCount;
 
 
     private void Start()
@@ -80,6 +81,7 @@ public class EnemyManager : Singleton<EnemyManager>
         int spawnPoint = Random.Range(0, spawnPoints.Length);
         GameObject enemy = Instantiate(enemyTypes[enemyNumber], spawnPoints[spawnPoint].position, spawnPoints[spawnPoint].rotation, transform);
         enemies.Add(enemy);
+        _UI.UpdateEnemyCount(enemies.Count);
     }
 
     //This wi;; spawn an enemy at each spawn point suquentally
@@ -104,6 +106,7 @@ public class EnemyManager : Singleton<EnemyManager>
 
         Destroy(_enemy);
         enemies.Remove(_enemy);
+        _UI.UpdateEnemyCount(enemies.Count);
     }
 
     /// <summary>
