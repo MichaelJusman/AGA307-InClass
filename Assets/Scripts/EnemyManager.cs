@@ -2,38 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public enum EnemyType
 {
-    OneHand, 
-    TwoHand, 
-    Archer
+    OneHand, TwoHand, Archer
 }
-
 public enum PatrolType
 {
-    Linear,
-    Random,
-    Loop,
+    Linear, Random, Loop
 }
 
 public class EnemyManager : Singleton<EnemyManager>
 {
-
-    public Transform[] spawnPoints;         //The spawn point for our enemies to spawn at
-    public GameObject[] enemyTypes;         //Contains all the different enemy types in our game
-    public List<GameObject> enemies;        //A list containing all the enemies in our scene
-    public string[] enemyNames;
-
+    public Transform[] spawnPoints;     //The spawn point for our enemies to spawn at
+    public GameObject[] enemyTypes;     //Contains all the different enemy types in our game
+    public List<GameObject> enemies;    //A list containing all the enemies in our scene
     public int spawnCount = 10;
     public string killCondition = "Two";
-    public float SpawnDelay = 2f;
-    public int enemyCount;
+    public float spawnDelay = 2f;
 
 
-    private void Start()
+    void Start()
     {
-        StartCoroutine(SpawnDelayed());
+        //StartCoroutine(SpawnDelayed());
         ShuffleList(enemies);
     }
 
@@ -47,23 +37,24 @@ public class EnemyManager : Singleton<EnemyManager>
         {
             KillAllEnemies();
         }
-        if(Input.GetKeyDown(KeyCode.O))
+        if (Input.GetKeyDown(KeyCode.O))
         {
             KillSpecificEnemy(killCondition);
         }
     }
 
     /// <summary>
-    /// Spawns an enemu with a delay until enemy count is reached
+    /// Spawns an enemy with a delay until enemy count is reached
     /// </summary>
     /// <returns></returns>
     IEnumerator SpawnDelayed()
     {
-        yield return new WaitForSeconds(SpawnDelay);
-        if (_GM.gameState == GameState.Playing)
-        {
+        yield return new WaitForSeconds(spawnDelay);
+
+        //if (_GM.gameState == GameState.Playing)
+        //{
             SpawnEnemy();
-        }
+        //}
 
         if (enemies.Count <= spawnCount)
         {
@@ -71,21 +62,21 @@ public class EnemyManager : Singleton<EnemyManager>
         }
     }
 
-    //<summary>
-    //Spawns a random enemy at a random spawn
-    //</summary>
-
+    /// <summary>
+    /// Spawns a random enemy at a random spawn point
+    /// </summary>
     void SpawnEnemy()
     {
         int enemyNumber = Random.Range(0, enemyTypes.Length);
         int spawnPoint = Random.Range(0, spawnPoints.Length);
-        GameObject enemy = Instantiate(enemyTypes[enemyNumber], spawnPoints[spawnPoint].position, spawnPoints[spawnPoint].rotation, transform);
+        GameObject enemy = Instantiate(enemyTypes[enemyNumber], spawnPoints[spawnPoint].position, transform.rotation, transform);
         enemies.Add(enemy);
         _UI.UpdateEnemyCount(enemies.Count);
     }
 
-    //This wi;; spawn an enemy at each spawn point suquentally
-    
+    /// <summary>
+    /// This will spawn an enemy at each spawn point sequentially
+    /// </summary>
     void SpawnEnemies()
     {
         for (int i = 0; i < spawnPoints.Length; i++)
@@ -98,10 +89,10 @@ public class EnemyManager : Singleton<EnemyManager>
     /// <summary>
     /// Kills a specific enemy in our game
     /// </summary>
-    /// <param name="_enemy"></param>
+    /// <param name="_enemy">The enemy we wish to kill</param>
     public void KillEnemy(GameObject _enemy)
     {
-        if(enemies.Count == 0)
+        if (enemies.Count == 0)
             return;
 
         Destroy(_enemy);
@@ -110,11 +101,9 @@ public class EnemyManager : Singleton<EnemyManager>
     }
 
     /// <summary>
-    /// Kills an enemy of the specific condition
+    /// Kills an enemy of the specified condition
     /// </summary>
     /// <param name="_condition">The condition of the enemy we want to kill</param>
-
-
     void KillSpecificEnemy(string _condition)
     {
         for(int i = 0; i < enemies.Count; i++)
@@ -124,6 +113,9 @@ public class EnemyManager : Singleton<EnemyManager>
         }
     }
 
+    /// <summary>
+    /// Kills all enemies within our scene
+    /// </summary>
     void KillAllEnemies()
     {
         if (enemies.Count == 0)
@@ -136,20 +128,38 @@ public class EnemyManager : Singleton<EnemyManager>
         enemies.Clear();
     }
 
-
+    /// <summary>
+    /// Gets a random spawn point from the list
+    /// </summary>
+    /// <returns>A random spawn point</returns>
     public Transform GetRandomSpawnPoint()
     {
         return spawnPoints[Random.Range(0, spawnPoints.Length)];
     }
 
+
+    void OnGameStateChanged(GameState _gameState)
+    {
+        switch(_gameState)
+        {
+            case GameState.Playing:
+                StartCoroutine(SpawnDelayed());
+                break;
+            default:
+                StopAllCoroutines();
+                break;
+        }
+    }
+
     private void OnEnable()
     {
-        Enemy.OnEnemyDie += KillEnemy;
+        GameEvents.OnEnemyDie += KillEnemy;
+        GameEvents.OnGameStateChanged += OnGameStateChanged;
     }
 
     private void OnDisable()
     {
-        Enemy.OnEnemyDie -= KillEnemy;
+        GameEvents.OnEnemyDie -= KillEnemy;
+        GameEvents.OnGameStateChanged -= OnGameStateChanged;
     }
-
 }

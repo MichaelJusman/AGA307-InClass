@@ -9,23 +9,22 @@ public class Door : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
-        {//Open door
+        if (other.CompareTag("Player"))
+        {
+            //open the doors
             door1.SetActive(false);
             door2.SetActive(false);
+            //instantiate some targets to fire at
         }
-      
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
+            //close the doors
             door1.SetActive(true);
             door2.SetActive(true);
         }
-        //Close door
-        
     }
-
 }

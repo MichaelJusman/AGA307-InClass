@@ -13,7 +13,7 @@ public class TriggerPad : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        //Increse the size of the sphere by 0.01f
+        //increase the size of the sphere by 0.01f
         sphere.transform.localScale += Vector3.one * 0.01f;
     }
 
@@ -22,7 +22,6 @@ public class TriggerPad : MonoBehaviour
         //reset the size of the sphere
         sphere.transform.localScale = Vector3.one;
         //change the colour of the sphere
-        sphere.GetComponent<Renderer>().material.color = Color.yellow;
+        sphere.GetComponent<Renderer>().material.color = Color.white;
     }
-
 }
