@@ -1038,9 +1038,10 @@ GameObject:
   - component: {fileID: 414932}
   - component: {fileID: 3374886}
   - component: {fileID: 2372788}
+  - component: {fileID: 8071014942982263584}
   m_Layer: 0
   m_Name: LongSword
-  m_TagString: Untagged
+  m_TagString: Sword
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1110,6 +1111,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &8071014942982263584
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141106}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.1
+  m_Height: 0.8
+  m_Direction: 2
+  m_Center: {x: 0.00000027785723, y: 0.00000003038774, z: 0.27066335}
 --- !u!1 &145208
 GameObject:
   m_ObjectHideFlags: 0
@@ -2128,7 +2143,7 @@ Animator:
   m_GameObject: {fileID: 185486}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 20300ac630e0fcd4dbab63a9b39cdafa, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f520acf159956cf4099d2bd02e613580, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
