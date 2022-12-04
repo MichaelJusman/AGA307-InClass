@@ -33,10 +33,14 @@ public class Enemy : GameBehaviour
     public Slider healthBarSlider;
     public TMP_Text healthBarText;
 
+    [Header("Audio")]
+    AudioSource audioSource;
+
     void Start()
     {
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
         Setup();
         SetupAI();
         //StartCoroutine(Move());
@@ -220,6 +224,7 @@ public class Enemy : GameBehaviour
         }
         else
         {
+            PlaySound(_AM.GetEnemyHitSound());
             PlayAnimation("Hit");
             GameEvents.ReportEnemyHit(this.gameObject);
         }
@@ -227,6 +232,7 @@ public class Enemy : GameBehaviour
 
     void Die()
     {
+        PlaySound(_AM.GetEnemyDieSound());
         GetComponent<Collider>().enabled = false;
         PlayAnimation("Die");
         ChangeSpeed(0);
@@ -239,6 +245,21 @@ public class Enemy : GameBehaviour
     {
         int randAnim = UnityEngine.Random.Range(1, 4);
         anim.SetTrigger(_animation + randAnim.ToString());
+    }
+
+    void PlaySound(AudioClip _clip)
+    {
+        if (audioSource != null)
+        {
+            audioSource.clip = _clip;
+            audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+            audioSource.Play();
+        }
+    }
+
+    public void Footstep()
+    {
+        PlaySound(_AM.GetFootsteps());
     }
 
 }

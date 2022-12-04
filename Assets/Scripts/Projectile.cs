@@ -9,6 +9,8 @@ public class Projectile : MonoBehaviour
     void Start()
     {
         Destroy(this.gameObject, 5);
+        if(GetComponent<AudioSource>() != null)
+            GetComponent<AudioSource>().pitch = Random.Range(0.9f, 1.1f);
     }
 
     private void OnCollisionEnter(Collision collision)
